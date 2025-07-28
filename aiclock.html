@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #a29bfe;
+            --accent-color: #fd79a8;
+            --text-color: #2d3436;
+            --light-color: #f5f6fa;
+            --success-color: #00b894;
+            --warning-color: #fdcb6e;
+            --danger-color: #d63031;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: var(--light-color);
+        }
+
+        #main {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 600px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        #header {
+            background: var(--primary-color);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #time {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        #hours, #minutes, #seconds {
+            font-size: 3.5rem;
+            font-weight: 700;
+            padding: 15px 25px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            min-width: 100px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #hours {
+            color: #ffeaa7;
+            border: 2px solid var(--warning-color);
+        }
+
+        #minutes {
+            color: #55efc4;
+            border: 2px solid var(--success-color);
+        }
+
+        #seconds {
+            color: #fd79a8;
+            border: 2px solid var(--accent-color);
+        }
+
+        #date {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            list-style-type: none;
+            font-size: 1.2rem;
+        }
+
+        #date li {
+            margin: 8px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #date span {
+            font-weight: 600;
+            color: var(--warning-color);
+        }
+
+        #alarm {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            width: 90%;
+            max-width: 600px;
+            backdrop-filter: blur(5px);
+        }
+
+        #alarm h1 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: white;
+            font-size: 1.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        input {
+            margin-bottom: 15px;
+            width: 100%;
+            height: 50px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            padding: 0 15px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            border-color: var(--accent-color);
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .colon {
+            font-size: 3rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            #time {
+                gap: 5px;
+                padding: 10px;
+            }
+            
+            #hours, #minutes, #seconds {
+                font-size: 2rem;
+                padding: 10px 15px;
+                min-width: 70px;
+            }
+            
+            .colon {
+                font-size: 2rem;
+            }
+            
+            #header {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+    <link rel="icon" href="download.png" type="png">
+    <title>Modern Alarm Clock</title>
+</head>
+
+<body>
+    <div id="alarm">
+        <div id="audio" style="width: 0px;height: 0px;overflow: hidden;">
+            <audio src="preview.mp3" controls id="audio_play"></audio>
+        </div>
+        <h1>Set Alarm</h1>
+        <input type="number" min="0" max="24" id="hours_alarm" placeholder="Hours (0-23)">
+        <input type="number" min="0" max="60" id="min_alarm" placeholder="Minutes (0-59)">
+        <input type="number" max="31" min="1" id="datealarm" placeholder="Date (1-31)">
+        <input type="number" id="yearalarm" min="2023" placeholder="Year (e.g., 2023)">
+        <input type="number" id="monthalarm" placeholder="Month (1-12)" min="1" max="12">
+    </div>
+    <div id="main">
+        <div id="header">ALARM CLOCK</div>
+
+        <div id="time">
+            <div id="hours">00</div>
+            <span class="colon">:</span>
+            <div id="minutes">00</div>
+            <span class="colon">:</span>
+            <div id="seconds">00</div>
+        </div>
+        <div id="date">
+            <li>DATE<span id="date-1"></span></li>
+            <li>DAY<span id="day"></span></li>
+            <li>MONTH<span id="month"></span></li>
+            <li>YEAR<span id="year"></span></li>
+        </div>
+    </div>
+</body>
+<script>
+   
+    function update() {
+        var h = document.querySelector("#hours");
+        var m = document.querySelector("#minutes");
+        var s = document.querySelector("#seconds");
+        h.textContent = "";
+        m.textContent = "";
+        s.textContent = "";
+        let date = new Date();
+
+        let minutes = date.getMinutes();
+        let hour = date.getHours();
+        let second = date.getSeconds();
+
+       
+        h.textContent = hour.toString().padStart(2, '0');
+        m.textContent = minutes.toString().padStart(2, '0');
+        s.textContent = second.toString().padStart(2, '0');
+
+        var get_ha = document.querySelector("#hours_alarm");
+        var get_mina = document.querySelector("#min_alarm");
+        var valm = get_mina.value;
+        var valh = get_ha.value;
+
+        if (valh < 24 && valm < 60) {
+            var get_ha = document.querySelector("#hours_alarm");
+            var get_mina = document.querySelector("#min_alarm");
+            var valm = get_mina.value;
+            var valh = get_ha.value;
+
+            var H = document.querySelector("#hours");
+            var gethv = H.textContent;
+
+            var M = document.querySelector("#minutes");
+            var getmv = M.textContent;
+
+            var getmoal = document.querySelector("#monthalarm").value;
+            var getdaal = document.querySelector("#datealarm").value;
+            var getyeal = document.querySelector("#yearalarm").value;
+
+            var gd = document.querySelector("#date-1").textContent;
+            var gm_1 = document.querySelector("#month").textContent = Number(month) + 1;
+            var gm = gm_1;
+
+            var gy = document.querySelector("#year").textContent;
+
+            if (valm == getmv && valh == gethv && getmoal == gm && getdaal == gd && getyeal == gy) {
+                var aud = document.querySelector("#audio_play");
+                aud.play();
+            }
+        } else if (valh || valm) {
+            alert("ENTER A VALID INPUT");
+            window.location.reload();
+        }
+    }
+    setInterval(update, 1000);
+    update();
+
+    let t_date = new Date();
+    var date = t_date.getDate();
+    var day = t_date.getDay();
+    var month = t_date.getMonth();
+    var year = t_date.getFullYear();
+
+    document.querySelector("#date-1").textContent = date;
+    document.querySelector("#month").textContent = Number(month) + 1;
+    document.querySelector("#year").textContent = year;
+
+    let dayNumber = day;
+    let dayName;
+
+    switch (dayNumber) {
+        case 0: dayName = "Sunday"; break;
+        case 1: dayName = "Monday"; break;
+        case 2: dayName = "Tuesday"; break;
+        case 3: dayName = "Wednesday"; break;
+        case 4: dayName = "Thursday"; break;
+        case 5: dayName = "Friday"; break;
+        case 6: dayName = "Saturday"; break;
+        default: dayName = "Invalid day number";
+    }
+
+    document.querySelector("#day").textContent = dayName;
+</script>
+</html>
