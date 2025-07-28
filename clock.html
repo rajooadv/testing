@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        body {
+            background-color: greenyellow;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+            height: 100vh;
+            flex-direction: row;
+            gap: 40px;
+
+        }
+
+        #main {
+
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 30px;
+            font-weight: 900;
+            background-color: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 10px 10px 10px;
+            height: 55%;
+        }
+
+        #header {
+            border: 2px solid green;
+            padding: 17px;
+            border-radius: 20px;
+            font-size: 50px;
+            background-color: purple;
+            color: white;
+        }
+
+        #time {
+            border: 6px solid blue;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+            gap: 20px;
+            padding: 30px;
+            margin-top: 15px;
+            border-radius: 20px;
+            font-size: 60px !important;
+        }
+
+        #hours {
+            border: 3px solid red;
+            color: coral;
+            border-radius: 4px;
+        }
+
+        #minutes {
+            border: 3px solid red;
+            color: rgb(255, 80, 229);
+            border-radius: 4px;
+        }
+
+        #seconds {
+            border: 3px solid rgb(92, 14, 236);
+            color: rgb(31, 235, 177);
+            border-radius: 4px;
+        }
+
+        #alarm {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-bottom: 7px;
+        }
+
+        input {
+            margin-bottom: 10px;
+            width: 200px;
+            height: 50px;
+            cursor: pointer;
+            border-radius: 10px;
+            background-color: black;
+            color: white;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-size: 20px;
+            font-weight: 900;
+            border: 1px solid rgb(139, 135, 135);
+        }
+
+        @media screen and (max-width:900px) {
+            body {
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+            }
+
+        }
+    </style>
+    <link rel="icon" href="download.png" type="png">
+    <title>CLOCK</title>
+</head>
+
+<body id="body_r">
+    <div id="login_page">
+        <div id="main_login"
+            style="border: 5px solid red;display: flex;justify-content: center;align-items: center;flex-direction: column;width: 50vh;height: 50vh;gap: 25px;border-radius: 20px;background-color: white;">
+            <h1><u>Login</u></h1>
+            <input type="text" id="user_name" style="width: 300px;padding-left: 13px;" placeholder="Enter User Name">
+            <input type="password" id="user_password" style="width: 300px;padding-left: 13px;"
+                placeholder="Enter Password">
+            <button id="login_but"
+                style="width: 30%;height: 10%;border-radius: 20px;font-size: 20px;font-weight: 900;background:linear-gradient(to right,blue,red);border: none;box-shadow:10px 10px 10px black;cursor: pointer;"
+                id="login_button">Login</button>
+        </div>
+    </div>
+    <div id="login">
+        <div id="alarm">
+            <div id="darkmode" style="position: absolute;top:10px;left: 90%;">
+                <input type="range" min="0" max="1" step="1" value="0" style="width: 30px;" id="dark">
+            </div>
+            <div id="audio" style="width: 0px;height: 0px;overflow: hidden;">
+                <audio src="preview.mp3" controls id="audio_play"></audio>
+            </div>
+            <button style="position: absolute; top: 10px;left: 30px;" onclick="logOut()">Log Out</button>
+            <h1 style="font-size: 24px;color: blue;font-family: Arial, Helvetica, sans-serif;margin-bottom: 0px;">Set
+                Alarm
+            </h1>
+            <input type="number" min="0" max="24" id="hours_alarm" placeholder="Enter the hours">
+            <input type="number" min="0" max="60" id="min_alarm" placeholder="Enter the minutes">
+            <input type="number" max="31" min="1" id="datealarm" placeholder="Enter the date">
+            <input type="number" id="yearalarm" min="0000" placeholder="Enter the year">
+            <input type="number" id="monthalarm" placeholder="Enter the month" min="1" max="12">
+
+        </div>
+        <div id="main">
+            <div id="header">ALARM CLOCK</div>
+
+            <div id="time">
+                <div id="hours">88</div>
+                <div id="minutes">88</div>
+                <div id="seconds">88</div>
+            </div>
+            <div id="date">
+                <li>DATE----<span id="date-1"></span></li>
+                <li>DAY-----<span id="day"></span></li>
+                <li>MONTH---<span id="month"></span></li>
+                <li>YEAR----<span id="year"></span></li>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    check_login();
+    function update() {
+
+        var h = document.querySelector("#hours");
+        var m = document.querySelector("#minutes");
+        var s = document.querySelector("#seconds");
+        h.textContent = "";
+        m.textContent = "";
+        s.textContent = "";
+        let date = new Date();
+
+        let minutes = date.getMinutes();
+
+        let hour = date.getHours();
+
+        let second = date.getSeconds();
+
+        h.textContent = hour;
+        m.textContent = minutes;
+        s.textContent = second;
+
+
+        var Darkm = document.querySelector("#dark");
+        var dv = Darkm.value;
+        if (dv == 0) {
+            var b = document.querySelector("#body_r");
+            document.querySelector("#body_r").style.backgroundColor = "yellow";
+
+            var i = document.querySelectorAll('input');
+            i.forEach(input => {
+                input.style.boxShadow = '0px 0px 0px transparent';
+                document.querySelector("#main").style.backgroundColor = "";
+            }); document.querySelector("#date").style.color = "";
+
+
+        } else {
+            var b = document.querySelector("#body_r");
+            var cbc = b.style.backgroundColor = "black";
+            var i = document.querySelectorAll('input');
+            i.forEach(input => {
+                input.style.boxShadow = '10px 10px 10px yellow';
+            });
+            document.querySelector("#main").style.backgroundColor = "black";
+            document.querySelector("#date").style.color = "white";
+        }
+
+
+
+
+        var get_ha = document.querySelector("#hours_alarm");
+        var get_mina = document.querySelector("#min_alarm");
+        var valm = get_mina.value;
+        var valh = get_ha.value;
+
+        if (valh < 24 && valm < 60) {
+            var get_ha = document.querySelector("#hours_alarm");
+            var get_mina = document.querySelector("#min_alarm");
+            var valm = get_mina.value;
+            var valh = get_ha.value;
+
+            var H = document.querySelector("#hours");
+            var gethv = H.textContent;
+
+            var M = document.querySelector("#minutes");
+            var getmv = M.textContent;
+
+            var getmoal = document.querySelector("#monthalarm").value;
+            var getdaal = document.querySelector("#datealarm").value;
+            var getyeal = document.querySelector("#yearalarm").value;
+
+            var gd = document.querySelector("#date-1").textContent;
+            var gm_1 = document.querySelector("#month").textContent = Number(month) + 1;
+            var gm = gm_1;
+
+            var gy = document.querySelector("#year").textContent;
+
+
+
+            if (valm == getmv && valh == gethv && getmoal == gm && getdaal == gd && getyeal == gy) {
+                var aud = document.querySelector("#audio_play");
+                aud.play();
+            } else {
+                // console.clear();
+                // console.log("Time not mached or invalid input.");
+
+            }
+
+
+        } else {
+            alert("ENTER A VALID INPUT");
+            window.location.reload();
+        }
+
+    }
+    setInterval(update, 1000);
+    update();
+
+    let t_date = new Date();
+    var date = t_date.getDate();
+    var day = t_date.getDay();
+    var month = t_date.getMonth();
+    var year = t_date.getFullYear();
+
+    document.querySelector("#date-1").textContent = date;
+    document.querySelector("#month").textContent = Number(month) + 1;
+    document.querySelector("#year").textContent = year;
+
+    let dayNumber = day;
+    let dayName;
+
+    switch (dayNumber) {
+        case 0:
+            dayName = "Sunday";
+            break;
+        case 1:
+            dayName = "Monday";
+            break;
+        case 2:
+            dayName = "Tuesday";
+            break;
+        case 3:
+            dayName = "Wednesday";
+            break;
+        case 4:
+            dayName = "Thursday";
+            break;
+        case 5:
+            dayName = "Friday";
+            break;
+        case 6:
+            dayName = "Saturday";
+            break;
+
+        default:
+            dayName = "Invalid day number";
+    }
+
+    document.querySelector("#day").textContent = dayName;
+
+
+
+    function check_login() {
+        var get_Llog = localStorage.getItem('log');
+
+        if (get_Llog == 'true') {
+            document.querySelector("#login_page").style.display = "none";
+            document.title="CLOCK";
+            document.querySelector("#login").style.display = "";
+        } else {
+            document.querySelector("#login").style.display = "none";
+            document.title="Login";
+            document.querySelector("#login_but").addEventListener('click', function login_button() {
+                document.querySelector("#login").style.display = "none";
+
+                var get_userName = document.querySelector("#user_name").value;
+                var get_userPass = document.querySelector("#user_password").value;
+                if (get_userName != "" && get_userPass != "") {
+                    var user_data = [
+                        {
+                            user: get_userName,
+                            password: get_userPass
+                        }
+                    ]
+                    localStorage.setItem('user_Data', JSON.stringify(user_data));
+                    localStorage.setItem('log', 'true');
+                    check_login();
+                } else {
+                    alert("Please enter something");
+                }
+            });
+
+        }
+
+
+    }
+
+    function logOut() { localStorage.clear(); window.location.reload(); }
+</script>
+
+</html>
